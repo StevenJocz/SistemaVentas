@@ -1,0 +1,195 @@
+.Productos {
+    width: 100%;
+}
+
+.Productos_Header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.Productos_Header h1 {
+    font-size: 2.2em;
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    color: var(--text-primario);
+    position: relative;
+    z-index: 10;
+}
+
+.Productos_Header h1 span {
+    background: var(--Gradient, linear-gradient(100deg, var(--text-primario) 37.82%, var(--text-terciario) 87.12%));
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+
+.Productos_Header_Navegacion {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.Productos_Header_Navegacion a {
+    text-decoration: none;
+    font-size: 15px;
+    font-family: "Barlow Condensed", sans-serif;
+    color: var(--text-cuaternario);
+}
+
+.Productos_Header_Navegacion .Seleccionado {
+    text-decoration: none;
+    font-size: 15px;
+    font-family: "Barlow Condensed", sans-serif;
+    color: var(--text-terciario);
+    font-weight: 600;
+}
+
+.Productos_Header_Navegacion .Icono {
+    font-size: 12px;
+    color: var(--text-cuaternario);
+}
+
+.Productos_Texto {
+    font-size: 1.2em;
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    color: var(--text-undecimo);
+}
+
+.Productos_Button {
+    width: 200px;
+    font-size: 20px;
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 400;
+    background-color: var(--btn-bg-boton);
+    color: var(--text-primario);
+    padding: 5px;
+    border-radius: .7rem;
+    -webkit-border-radius: .7rem;
+    -moz-border-radius: .7rem;
+    -ms-border-radius: .7rem;
+    -o-border-radius: .7rem;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    margin: 20px 0;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+
+
+
+.Add  {
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-negro);
+    z-index: 1000;
+}
+
+.Add_Content {
+    width: 50%;
+    max-height: 80vh;
+    background-color: var(--background-dark-body);
+    border-radius: 0.7em;
+    -webkit-border-radius: 0.7em;
+    -moz-border-radius: 0.7em;
+    -ms-border-radius: 0.7em;
+    -o-border-radius: 0.7em;
+    border: 1px solid var(--border-claro);
+    padding: 10px;
+    z-index: 1001;
+    overflow: hidden;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.Add_Content::-webkit-scrollbar {
+    width: 1px;
+}
+
+.Add_Content::-webkit-scrollbar-thumb {
+    background-color:  #ffffff;
+}
+
+.Add_Content::-webkit-scrollbar-track {
+    background-color: var(--background-dark);
+}
+
+.Add_Content_Encabezado {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.Add_Content_Encabezado h2 {
+    font-size: 1.5em;
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    color: var(--text-undecimo);
+}
+
+.Add_Content_Encabezado_Icono {
+    font-size: 30px;
+    color: var(--text-undecimo);
+    cursor: pointer;
+}
+
+.Formulario_Dos {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.Formulario_Dos div {
+    width: 100%;
+}
+
+.Formulario_Boton {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.Formulario_Boton button {
+    width: 150px;
+    font-size: 19px;
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 400;
+    background-color: var(--btn-bg-boton);
+    color: var(--text-primario);
+    padding: 10px;
+    border-radius: .7rem;
+    -webkit-border-radius: .7rem;
+    -moz-border-radius: .7rem;
+    -ms-border-radius: .7rem;
+    -o-border-radius: .7rem;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+    cursor: pointer;
+    border: none;
+    outline: none;
+}

@@ -1,0 +1,126 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model clientes {
+  id            Int             @id @default(autoincrement())
+  nombre        String          @db.VarChar(255)
+  cuenta        String          @unique @db.VarChar(255)
+  telefono      String?         @db.VarChar(255)
+  correo        String?         @db.VarChar(255)
+  instagram     String?         @db.VarChar(255)
+  x             String?         @db.VarChar(255)
+  youtube       String?         @db.VarChar(255)
+  facebook      String?         @db.VarChar(255)
+  estado        Int
+  pagos         pagos[]
+  venta_detalle venta_detalle[]
+}
+
+model contratos {
+  id           Int       @id @default(autoincrement())
+  id_empresa   Int?
+  fecha_inicio DateTime  @db.Date
+  fecha_fin    DateTime  @db.Date
+  estado       Boolean
+  empresas     empresas? @relation(fields: [id_empresa], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model empresas {
+  id        Int         @id @default(autoincrement())
+  nombre    String      @db.VarChar(255)
+  contratos contratos[]
+  usuarios  usuarios[]
+}
+
+model estados_deudas {
+  id            Int             @id @default(autoincrement())
+  nombre        String?         @db.VarChar(100)
+  venta_detalle venta_detalle[]
+}
+
+model estados_envios {
+  id            Int             @id @default(autoincrement())
+  nombre        String?         @db.VarChar(100)
+  venta_detalle venta_detalle[]
+}
+
+model estados_facturas {
+  id            Int             @id @default(autoincrement())
+  nombre        String?         @db.VarChar(100)
+  venta_detalle venta_detalle[]
+}
+
+model pagos {
+  id            Int       @id @default(autoincrement())
+  id_cliente    Int?
+  fecha         DateTime? @default(now()) @db.Timestamp(6)
+  monto         Decimal   @db.Money
+  metodo_pago   String?   @db.VarChar(255)
+  observaciones String?
+  clientes      clientes? @relation(fields: [id_cliente], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_pagos_cliente")
+}
+
+model productos {
+  id            Int             @id @default(autoincrement())
+  nombre        String          @db.VarChar(255)
+  color         String?         @db.VarChar(50)
+  talla         String?         @db.VarChar(50)
+  tipo          String?         @db.VarChar(50)
+  precio_compra Decimal         @db.Money
+  precio_venta  Decimal         @db.Money
+  stock         Int
+  venta_detalle venta_detalle[]
+}
+
+model roles {
+  id       Int        @id @default(autoincrement())
+  rol      String     @db.VarChar(255)
+  usuarios usuarios[]
+}
+
+model usuarios {
+  id          Int       @id @default(autoincrement())
+  usuario     String    @db.VarChar(255)
+  rol         Int?
+  empresa     Int?
+  contrasena  String    @db.VarChar(255)
+  correo      String    @db.VarChar(255)
+  telefono    String?   @db.VarChar(255)
+  foto_perfil String?   @db.VarChar(255)
+  fecha_crea  DateTime? @default(now()) @db.Timestamp(6)
+  empresas    empresas? @relation(fields: [empresa], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_usuarios_empresa")
+  roles       roles?    @relation(fields: [rol], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_usuarios_rol")
+  ventas      ventas[]
+}
+
+model venta_detalle {
+  id                Int               @id @default(autoincrement())
+  id_venta          Int?
+  id_cliente        Int?
+  id_producto       Int?
+  cantidad          Int
+  precio            Decimal           @db.Money
+  id_estado_factura Int?
+  id_estado_deuda   Int?
+  id_estado_envio   Int?
+  clientes          clientes?         @relation(fields: [id_cliente], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_venta_detalle_cliente")
+  productos         productos?        @relation(fields: [id_producto], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_venta_detalle_producto")
+  estados_deudas    estados_deudas?   @relation(fields: [id_estado_deuda], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  estados_envios    estados_envios?   @relation(fields: [id_estado_envio], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  estados_facturas  estados_facturas? @relation(fields: [id_estado_factura], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  ventas            ventas?           @relation(fields: [id_venta], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model ventas {
+  id            Int             @id @default(autoincrement())
+  id_usuario    Int?
+  fecha         DateTime?       @default(now()) @db.Timestamp(6)
+  venta_detalle venta_detalle[]
+  usuarios      usuarios?       @relation(fields: [id_usuario], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_ventas_usuario")
+}
