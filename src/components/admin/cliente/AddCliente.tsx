@@ -18,6 +18,7 @@ const AddCliente: React.FC<Props> = ({ id, onClose }) => {
     useEffect(() => {
         if (id > 0) {
             handleData(id);
+            
         }
     }, [id]);
 
