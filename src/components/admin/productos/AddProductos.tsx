@@ -5,7 +5,7 @@ import { IoCloseCircle } from 'react-icons/io5';
 import { StyledTextField } from '@/utils/MaterialUI';
 import ButtonSubmit from '@/components/button/ButtonSubmit';
 import { ProductoModel } from './Productos.model';
-import { fetchId } from './Productos.service';
+import { createProducto, fetchId, updateProducto } from './Productos.service';
 
 interface Props {
   id: number;
@@ -27,7 +27,7 @@ const AddProductos: React.FC<Props> = ({ id, onClose }) => {
       const dataFetch = await fetchId(id);
       setData(dataFetch);
     } catch (error) {
-      console.error('Error al obtener la dependencia:', error);
+      console.error('Error al obtener los clientes:', error);
     }
   };
 
@@ -38,9 +38,16 @@ const AddProductos: React.FC<Props> = ({ id, onClose }) => {
 
     try {
       if (id > 0) {
-
+        const updated = await updateProducto(id, values);
+        if (updated) onClose();
       } else {
+        const { id: _, ...cleanValues } = values;
 
+        const created = await createProducto({
+          ...cleanValues,
+          id_usuario: 1
+        });
+        if (created) onClose();
       }
     } catch (error) {
       console.error('Error al registrar:', error);
@@ -85,7 +92,7 @@ const AddProductos: React.FC<Props> = ({ id, onClose }) => {
                 <div>
                   <StyledTextField
                     name='nombre'
-                    label="Nombre del cliente"
+                    label="Nombre del producto"
                     variant="outlined"
                     size="small"
                     placeholder='Introduce nombre'
@@ -134,7 +141,7 @@ const AddProductos: React.FC<Props> = ({ id, onClose }) => {
                 </div>
               </div>
               <div className={style.Formulario_Dos}>
-                
+
                 <div>
                   <StyledTextField
                     name='precio_compra'
@@ -174,7 +181,7 @@ const AddProductos: React.FC<Props> = ({ id, onClose }) => {
                   />
                   <ErrorMessage name='stock' component={() => <p className={style.Error}>{errors.stock}</p>} />
                 </div>
-               
+
               </div>
               <ButtonSubmit
                 id={id}

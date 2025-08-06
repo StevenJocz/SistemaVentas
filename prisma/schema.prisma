@@ -75,6 +75,10 @@ model productos {
   precio_compra Decimal         @db.Money
   precio_venta  Decimal         @db.Money
   stock         Int
+<<<<<<< Updated upstream
+=======
+  id_usuario    Int?
+>>>>>>> Stashed changes
   venta_detalle venta_detalle[]
 }
 

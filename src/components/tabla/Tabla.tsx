@@ -90,6 +90,22 @@ const Tabla: React.FC<DataTableProps> = ({
         );
     };
 
+    const renderStock = (numero: number) => {
+        let clase = "Stock_Alto"; // Verde
+
+        if (numero === 0) {
+            clase = "Stock_Bajo"; // Rojo
+        } else if (numero > 0 && numero <= 10) {
+            clase = "Stock_Medio"; // Naranja
+        }
+
+        return (
+            <div className={`Table_Stock ${clase}`}>
+                {numero > 0 ? `${numero}` : "Sin stock"}
+            </div>
+        );
+    };
+
     return (
         <div className="Tabla">
             {verBuscador && (
@@ -131,6 +147,9 @@ const Tabla: React.FC<DataTableProps> = ({
                                     }
                                     if (column === 'estado') {
                                         cellContent = renderActivo(row[column]);
+                                    }
+                                    if (column === 'stock') {
+                                        cellContent = renderStock(row[column]);
                                     }
                                     return <StyledTableCell key={column}>{cellContent}</StyledTableCell>;
                                 })}

@@ -10,7 +10,8 @@ import AddProductos from './AddProductos';
 import { fetchData } from './Productos.service';
 
 const Productos = () => {
-   const [data, setData] = useState<ProductoModel[]>([]);
+   const [data, setData] = useState<Partial<ProductoModel>[]>([]);
+   
     const [verAdd, setVerAdd] = useState(false);
     const [id, setId] = useState(0);
 
@@ -18,9 +19,23 @@ const Productos = () => {
         handleData();
     }, []);
 
-    const handleData = async () => {
+   
+
+      const handleData = async () => {
         const dataFetch: ProductoModel[] = await fetchData();
-        setData(dataFetch);
+    
+        const camposReducidos = dataFetch?.map(producto => ({
+            id: producto.id,
+            nombre: producto.nombre,
+            color: producto.color,
+            talla: producto.talla,
+            tipo: producto.tipo,    
+            compra: producto.precio_compra,
+            venta: producto.precio_venta,
+            stock: producto.stock,
+        })) || [];
+    
+        setData(camposReducidos);
     }
 
     const handleVerAdd = (id: number) => {

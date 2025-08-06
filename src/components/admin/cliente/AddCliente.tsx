@@ -5,7 +5,7 @@ import { ErrorMessage, Form, Formik, FormikValues } from 'formik';
 import { IoCloseCircle } from 'react-icons/io5';
 import { StyledTextField } from '@/utils/MaterialUI';
 import ButtonSubmit from '@/components/button/ButtonSubmit';
-import { fetchId } from './Cliente.service';
+import { createCliente, fetchId, updateCliente } from './Cliente.service';
 interface Props {
     id: number;
     onClose: () => void;
@@ -18,7 +18,7 @@ const AddCliente: React.FC<Props> = ({ id, onClose }) => {
     useEffect(() => {
         if (id > 0) {
             handleData(id);
-            
+
         }
     }, [id]);
 
@@ -27,21 +27,22 @@ const AddCliente: React.FC<Props> = ({ id, onClose }) => {
             const dataFetch = await fetchId(id);
             setData(dataFetch);
         } catch (error) {
-            console.error('Error al obtener la dependencia:', error);
+            console.error('Error al obtener los clientes:', error);
         }
     };
 
     const handleRegistrar = async (values: FormikValues) => {
         setIsLoading(true);
 
-
-
         try {
             if (id > 0) {
-
+                const updated = await updateCliente(id, values);
+                if (updated) onClose();
             } else {
-
+                const created = await createCliente({ ...values, estado: 1, id_usuario: 1 });
+                if (created) onClose();
             }
+
         } catch (error) {
             console.error('Error al registrar:', error);
         } finally {
@@ -64,11 +65,11 @@ const AddCliente: React.FC<Props> = ({ id, onClose }) => {
                         nombre: data?.nombre || '',
                         telefono: data?.telefono || '',
                         correo: data?.correo || '',
-                        tiktok:'',
-                        instagram:  '',   
-                        facebook:  '',
-                        x: '',
-                        youtube:  '',
+                        tiktok: data?.tiktok || '',
+                        instagram: data?.instagram || '',
+                        facebook: data?.facebook || '',
+                        x: data?.x || '',
+                        youtube: data?.youtube || '',
                     }}
                     validate={(values) => {
                         let errors: any = {};
@@ -103,7 +104,7 @@ const AddCliente: React.FC<Props> = ({ id, onClose }) => {
                                         size="small"
                                         placeholder='Introduce el numero de teléfono'
                                         value={values.telefono}
-                                        onChange={(e) => setFieldValue('nit', e.target.value)}
+                                        onChange={(e) => setFieldValue('telefono', e.target.value)}
                                     />
                                     <ErrorMessage name='telefono' component={() => <p className={style.Error}>{errors.telefono}</p>} />
                                 </div>
@@ -147,6 +148,9 @@ const AddCliente: React.FC<Props> = ({ id, onClose }) => {
                                     />
                                     <ErrorMessage name='instagram' component={() => <p className={style.Error}>{errors.instagram}</p>} />
                                 </div>
+                            </div>
+                             <div className={style.Formulario_Dos}>
+                                
                                 <div>
                                     <StyledTextField
                                         name='facebook'

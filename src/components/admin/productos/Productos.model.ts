@@ -1,10 +1,11 @@
 export interface ProductoModel {
   id: number;
   nombre: string;
-  color?: string;
-  talla?: string;
-  tipo?: string;
-  precio_compra: number; 
+  color: string | null;
+  talla: string | null;
+  tipo: string | null;
+  precio_compra: number;
   precio_venta: number;
   stock: number;
+  id_usuario: number | null;
 }

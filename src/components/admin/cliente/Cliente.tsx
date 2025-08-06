@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from 'react';
+import { act, useEffect, useState } from 'react';
 import style from './Cliente.module.css'
 import Link from 'next/link';
 import { IoAdd, IoChevronForwardOutline } from 'react-icons/io5';
@@ -10,7 +10,7 @@ import { ClientesModel } from './Cliente.model';
 import { fetchData } from './Cliente.service';
 
 const Cliente = () => {
-   const [data, setData] = useState<ClientesModel[]>([]);
+   const [data, setData] = useState<Partial<ClientesModel>[]>([]);
     const [verAdd, setVerAdd] = useState(false);
     const [id, setId] = useState(0);
 
@@ -18,10 +18,19 @@ const Cliente = () => {
         handleData();
     }, []);
 
-    const handleData = async () => {
-        const dataFetch: ClientesModel[] = await fetchData();
-        setData(dataFetch);
-    }
+  const handleData = async () => {
+    const dataFetch: ClientesModel[] = await fetchData();
+
+    const camposReducidos = dataFetch?.map(cliente => ({
+        id: cliente.id,
+        nombre: cliente.nombre,
+        telefono: cliente.telefono,
+        correo: cliente.correo,
+        estado: cliente.estado,
+    })) || [];
+
+    setData(camposReducidos);
+}
 
     const handleVerAdd = (id: number) => {
         setId(id);

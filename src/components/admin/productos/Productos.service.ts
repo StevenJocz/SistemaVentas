@@ -1,115 +1,97 @@
+import { productos } from '@prisma/client';
 import { ProductoModel } from './Productos.model';
 
-// Simulación de los productos en memoria
-const productos: ProductoModel[] = [
-  {
-    id: 1,
-    nombre: 'Camiseta Blanca',
-    color: 'Blanco',
-    talla: 'M',
-    tipo: 'Ropa',
-    precio_compra: 15000,
-    precio_venta: 25000,
-    stock: 50
-  },
-  {
-    id: 2,
-    nombre: 'Jeans Azul',
-    color: 'Azul',
-    talla: '32',
-    tipo: 'Ropa',
-    precio_compra: 40000,
-    precio_venta: 60000,
-    stock: 20
-  },
-  {
-    id: 3,
-    nombre: 'Zapatos Deportivos',
-    color: 'Negro',
-    talla: '42',
-    tipo: 'Calzado',
-    precio_compra: 80000,
-    precio_venta: 120000,
-    stock: 15
-  },
-  {
-    id: 4,
-    nombre: 'Chaqueta Impermeable',
-    color: 'Gris',
-    talla: 'L',
-    tipo: 'Ropa',
-    precio_compra: 70000,
-    precio_venta: 110000,
-    stock: 10
-  },
-  {
-    id: 5,
-    nombre: 'Gorra Estampada',
-    color: 'Rojo',
-    talla: 'Única',
-    tipo: 'Accesorio',
-    precio_compra: 8000,
-    precio_venta: 15000,
-    stock: 60
-  },
-  {
-    id: 6,
-    nombre: 'Pantaloneta',
-    color: 'Verde',
-    talla: 'S',
-    tipo: 'Ropa',
-    precio_compra: 12000,
-    precio_venta: 20000,
-    stock: 35
-  },
-  {
-    id: 7,
-    nombre: 'Sudadera Completa',
-    color: 'Negro',
-    talla: 'XL',
-    tipo: 'Ropa',
-    precio_compra: 50000,
-    precio_venta: 85000,
-    stock: 25
-  },
-  {
-    id: 8,
-    nombre: 'Reloj Deportivo',
-    color: 'Negro',
-    talla: '',
-    tipo: 'Accesorio',
-    precio_compra: 100000,
-    precio_venta: 150000,
-    stock: 5
-  },
-  {
-    id: 9,
-    nombre: 'Bolso de Tela',
-    color: 'Azul',
-    talla: '',
-    tipo: 'Accesorio',
-    precio_compra: 20000,
-    precio_venta: 35000,
-    stock: 18
-  },
-  {
-    id: 10,
-    nombre: 'Camisa Formal',
-    color: 'Celeste',
-    talla: 'M',
-    tipo: 'Ropa',
-    precio_compra: 25000,
-    precio_venta: 40000,
-    stock: 40
-  }
-];
 
-// Retornar todos
-export const fetchData = async (): Promise<ProductoModel[]> => {
-  return productos;
+export const fetchData = async () => {
+    try {
+        const response = await fetch(`/api/productos`);
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || 'No registrado');
+        }
+
+        return data.productos;
+    } catch (error: any) {
+        return null;
+    }
 };
 
 // Retornar por ID
 export const fetchId = async (id: number): Promise<ProductoModel | undefined> => {
-  return productos.find((p) => p.id === id);
+  try {
+    const response = await fetch(`/api/productos/${id}`);
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Error al obtener el producto");
+    }
+
+    const p = data.producto;
+
+    return {
+      id: p.id,
+      nombre: p.nombre,
+      color: p.color ?? '',
+      talla: p.talla ?? '',
+      tipo: p.tipo ?? '',
+      precio_compra: parseFloat(p.precio_compra),
+      precio_venta: parseFloat(p.precio_venta),
+      stock: p.stock,
+      id_usuario: p.id_usuario ?? 0,
+    };
+  } catch (error) {
+    console.error("Error al obtener el producto por ID:", error);
+    return undefined;
+  }
+};
+
+// Crear producto
+export const createProducto = async (data: Partial<ProductoModel>) => {
+  try {
+    const response = await fetch(`/api/productos`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || 'Error al crear el producto');
+    }
+
+    return result.producto;
+  } catch (error) {
+    console.error('Error al crear el producto:', error);
+    return null;
+  }
+};
+
+
+// Actualizar producto
+export const updateProducto = async (id: number, data: Partial<ProductoModel>) => {
+  try {
+    const response = await fetch(`/api/productos/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || 'Error al actualizar el producto');
+    }
+
+    return result.producto;
+  } catch (error) {
+    console.error('Error al actualizar el producto:', error);
+    return null;
+  }
 };
