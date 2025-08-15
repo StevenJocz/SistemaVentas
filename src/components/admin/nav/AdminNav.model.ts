@@ -23,7 +23,7 @@ export const RoutesAdmin: Record<string, Route> = {
         name: 'Productos',
         icon: IoGridOutline 
     },
-    CONVENIOS: {
+    VENTAS: {
         path: '/dashboard/ventas',
         name: 'Ventas',
         icon: IoBagCheckOutline 

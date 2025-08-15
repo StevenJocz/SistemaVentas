@@ -5,8 +5,8 @@ import { AdminNav } from '@/components/admin/nav';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: "Registro de Personas",
-    description: "Registro de personas",
+    title: "SISTEMA DE VENTAS",
+  description: "Sistema de ventas",
     icons: {
         icon: ['../../favicon.ico'],
         apple: ['../../favicon.ico'],

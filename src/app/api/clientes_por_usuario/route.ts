@@ -14,21 +14,13 @@ export async function GET(req: Request) {
       );
     }
 
-    const cantidadClientes = await prisma.clientes.count({
+    const total = await prisma.clientes.count({
       where: {
         id_usuario: parseInt(id_usuario),
-        estado: 1,
       },
     });
 
-    if (cantidadClientes === 0) {
-      return NextResponse.json(
-        { result: false, error: "Clientes no encontrados" },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json({ result: true, cantidadClientes });
+    return NextResponse.json({ total });
   } catch (error) {
     console.error("Error en GET /api/clientes:", error);
     return NextResponse.json(

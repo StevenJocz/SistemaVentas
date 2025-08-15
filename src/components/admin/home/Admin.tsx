@@ -20,7 +20,9 @@ const Admin = () => {
 
 
   const handleWidget = async () => {
-    const Widget = await fetchWidget();
+    const Widget = await fetchWidget(1);
+
+    console.log('Widget data:', Widget);
     setWidget(Widget);
   };
 
@@ -44,12 +46,12 @@ const Admin = () => {
               <Widget widgetData={widget?.total} />
             </div>
             <div className={style.Admin_Widget_Right}>
-              <h2>Registros mes a mes</h2>
+              <h2>Ventas mes a mes</h2>
 
               <AreaChart
                 width={650}
                 height={100}
-                data={widget?.inscripciones}
+                data={widget?.ventas ?? []}
                 margin={{ top: 20, right: 0, left: -25, bottom: 0 }}
               >
                 <CartesianGrid strokeDasharray="3 3" />

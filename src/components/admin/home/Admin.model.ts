@@ -1,4 +1,4 @@
-export interface WidgetInscripciones {
+export interface WidgetVantas {
     id: number;
     nombre: string;
     total: number;
@@ -27,6 +27,6 @@ export interface dataInscripciones {
 }
 
 export interface ObjectWidget {
-    inscripciones: WidgetInscripciones[];
+    ventas: WidgetVantas[];
     total: WidgetTotal[];
 }

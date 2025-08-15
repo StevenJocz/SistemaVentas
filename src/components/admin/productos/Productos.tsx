@@ -8,6 +8,7 @@ import { Tabla } from '@/components/tabla';
 import { ProductoModel } from './Productos.model';
 import AddProductos from './AddProductos';
 import { fetchData } from './Productos.service';
+import { formatMoneda } from '@/utils/ConvertirMoneda';
 
 const Productos = () => {
    const [data, setData] = useState<Partial<ProductoModel>[]>([]);
@@ -30,8 +31,8 @@ const Productos = () => {
             color: producto.color,
             talla: producto.talla,
             tipo: producto.tipo,    
-            compra: producto.precio_compra,
-            venta: producto.precio_venta,
+            compra:  formatMoneda(producto.precio_compra.toString()),
+            venta: formatMoneda(producto.precio_venta.toString()),
             stock: producto.stock,
         })) || [];
     

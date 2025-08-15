@@ -90,6 +90,56 @@ const Tabla: React.FC<DataTableProps> = ({
         );
     };
 
+    const renderEstadoFactura = (estado: string) => {
+        const estadoClases: Record<string, string> = {
+            "Emitida": "Estado_Emitida",
+            "No emitida": "Estado_NoEmitida",
+            "Pendiente": "Estado_Pendiente"
+        };
+
+        const clase = estadoClases[estado] || "Estado_Default";
+
+        return (
+            <div className={`Table_Estado ${clase}`}>
+                {estado}
+            </div>
+        );
+    };
+
+    const renderEstadoEnvio = (estado: string) => {
+        const estadoClases: Record<string, string> = {
+            "Enviado": "Envio_Enviado",
+            "Pendiente": "Envio_Pendiente",
+            "Cancelado": "Envio_Cancelado"
+        };
+
+        const clase = estadoClases[estado] || "Envio_Default";
+
+        return (
+            <div className={`Table_Estado ${clase}`}>
+                {estado}
+            </div>
+        );
+    };
+
+    // Estado de pago
+    const renderEstadoPago = (estado: string) => {
+        const estadoClases: Record<string, string> = {
+            "Pagado": "Pago_Pagado",
+            "Pendiente": "Pago_Pendiente",
+            "Rechazado": "Pago_Rechazado"
+        };
+
+        const clase = estadoClases[estado] || "Pago_Default";
+
+        return (
+            <div className={`Table_Estado ${clase}`}>
+                {estado}
+            </div>
+        );
+    };
+
+
     const renderStock = (numero: number) => {
         let clase = "Stock_Alto"; // Verde
 
@@ -150,6 +200,15 @@ const Tabla: React.FC<DataTableProps> = ({
                                     }
                                     if (column === 'stock') {
                                         cellContent = renderStock(row[column]);
+                                    }
+                                    if (column === 'estadoFactura') {
+                                        cellContent = renderEstadoFactura(row[column]);
+                                    }
+                                    if (column === 'estadoEnvio') {
+                                        cellContent = renderEstadoEnvio(row[column]);
+                                    }
+                                    if (column === 'estadoPago') {
+                                        cellContent = renderEstadoPago(row[column]);
                                     }
                                     return <StyledTableCell key={column}>{cellContent}</StyledTableCell>;
                                 })}
