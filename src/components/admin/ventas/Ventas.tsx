@@ -12,6 +12,7 @@ import { formatMoneda } from '@/utils/ConvertirMoneda';
 import { formatFecha } from '@/utils/ConvertirFecha';
 import AddVentas from './AddVentas';
 import ListVentas from './ListVentas';
+import { esES } from '@mui/x-date-pickers';
 
 const Ventas = () => {
   const [data, setData] = useState<Partial<VentaModel>[]>([]);
@@ -31,6 +32,7 @@ const Ventas = () => {
       id: venta.id,
       fecha: formatFecha(venta.fecha),
       total: formatMoneda(venta.total),
+      Estado: venta.estado,
     })) || [];
 
     setData(camposReducidos);

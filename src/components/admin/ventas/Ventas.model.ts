@@ -13,5 +13,6 @@ export interface VentaModel {
     id: number;
     fecha: string;
     total: string;
+    estado: string;
     detalles?: DetalleVentaModel[];
 }

@@ -90,6 +90,15 @@ const Tabla: React.FC<DataTableProps> = ({
         );
     };
 
+
+    const renderEstadoVenta = (estado: string) => {
+        return (
+            <div className={`Table_Estado ${estado  == "Abierta" ? "Abierta" : "Cerrada"}`}>
+                {estado}
+            </div>
+        );
+    };
+
     const renderEstadoFactura = (estado: string) => {
         const estadoClases: Record<string, string> = {
             "Emitida": "Estado_Emitida",
@@ -197,6 +206,9 @@ const Tabla: React.FC<DataTableProps> = ({
                                     }
                                     if (column === 'estado') {
                                         cellContent = renderActivo(row[column]);
+                                    }
+                                    if (column === 'Estado') {
+                                        cellContent = renderEstadoVenta(row[column]);
                                     }
                                     if (column === 'stock') {
                                         cellContent = renderStock(row[column]);

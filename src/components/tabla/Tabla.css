@@ -108,6 +108,14 @@
     -o-border-radius: 0.7rem;
 }
 
+.Cerrada {
+  background-color: #2e7d32; /* Verde */
+}
+
+.Abierta {
+  background-color: #f57c00; /* Naranja */
+}
+
 .Stock_Alto {
   background-color: #2e7d32; /* Verde */
 }
