@@ -11,6 +11,7 @@ import { fetchData } from './Ventas.service';
 import { formatMoneda } from '@/utils/ConvertirMoneda';
 import { formatFecha } from '@/utils/ConvertirFecha';
 import AddVentas from './AddVentas';
+import ListVentas from './ListVentas';
 
 const Ventas = () => {
   const [data, setData] = useState<Partial<VentaModel>[]>([]);
@@ -59,11 +60,11 @@ const Ventas = () => {
         </div>
       </div>
       {verAdd ? (
-        <AddVentas
-            id={id}
-            onClose={() => handleOnClose()}
-        />
-        
+        id === 0 ? (
+          <AddVentas onClose={handleOnClose} />
+        ) : (
+          <ListVentas id={id} onClose={handleOnClose} />
+        )
       ) : (
         <>
           <p className={style.Ventas_Texto}>En este módulo encontrarás todas las opciones relacionadas con la gestión de ventas.</p>

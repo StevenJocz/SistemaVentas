@@ -10,15 +10,15 @@ datasource db {
 model clientes {
   id            Int             @id @default(autoincrement())
   nombre        String          @db.VarChar(255)
-  cuenta        String          @unique @db.VarChar(255)
+  tiktok        String          @unique(map: "clientes_cuenta_key") @db.VarChar(255)
   telefono      String?         @db.VarChar(255)
   correo        String?         @db.VarChar(255)
+  estado        Int
   instagram     String?         @db.VarChar(255)
   x             String?         @db.VarChar(255)
   youtube       String?         @db.VarChar(255)
   facebook      String?         @db.VarChar(255)
-  estado        Int
-  id_usuario    Int
+  id_usuario    Int?
   pagos         pagos[]
   venta_detalle venta_detalle[]
 }
@@ -73,12 +73,25 @@ model productos {
   color         String?         @db.VarChar(50)
   talla         String?         @db.VarChar(50)
   tipo          String?         @db.VarChar(50)
-  precio_compra Decimal         @db.Money
-  precio_venta  Decimal         @db.Money
-  stock         Int
-  id_usuario    Int
-  estado        Int
+  id_usuario    Int?
   venta_detalle venta_detalle[]
+  // 👉 relación nueva con inventario
+  inventarios   inventario[]
+}
+
+model inventario {
+  id            Int      @id @default(autoincrement())
+  id_producto   Int
+  cantidad      Int
+  precio_compra Decimal  @db.Money
+  precio_venta  Decimal  @db.Money
+  createdat     DateTime @default(now()) @db.Timestamp(6)
+  updatedat     DateTime @default(now()) @db.Timestamp(6)
+  tipo          String?
+  // 👉 relación inversa hacia productos
+  producto      productos            @relation(fields: [id_producto], references: [id])
+
+  @@index([id_producto])
 }
 
 model roles {

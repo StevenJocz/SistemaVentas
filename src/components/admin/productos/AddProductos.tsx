@@ -34,27 +34,73 @@ const AddProductos: React.FC<Props> = ({ id, onClose }) => {
   const handleRegistrar = async (values: FormikValues) => {
     setIsLoading(true);
 
-
-
     try {
       if (id > 0) {
-        const updated = await updateProducto(id, values);
+        if (!data) return;
+
+        let stockCambio = false;
+        let nuevoStock = 0;
+
+        // 🔹 Verificar cambios en stock
+        if (values.stock !== data.stock) {
+          const diferencia = values.stock - data.stock;
+          nuevoStock = diferencia;
+          stockCambio = true;
+        }
+
+        // 🔹 Verificar cambios en los demás campos
+        const cambios: Record<string, boolean> = {
+          nombre: values.nombre !== data.nombre,
+          color: values.color !== data.color,
+          talla: values.talla !== data.talla,
+          tipo: values.tipo !== data.tipo,
+          precio_compra: values.precio_compra !== data.precio_compra,
+          precio_venta: values.precio_venta !== data.precio_venta,
+          stock: stockCambio,
+        };
+
+        // 🔹 Si no hubo cambios en nada, no hacemos update
+        const huboCambios = Object.values(cambios).some((c) => c === true);
+
+        if (!huboCambios) {
+          console.log("No hubo cambios en ningún campo");
+          onClose();
+          return;
+        }
+
+        // 🔹 Valores actualizados (solo los que cambian)
+        const updatedValues = {
+          nombre: values.nombre,
+          color: values.color,
+          talla: values.talla,
+          tipo: values.tipo,
+          precio_compra: values.precio_compra,
+          precio_venta: values.precio_venta,
+          stock: stockCambio ? nuevoStock : 0, 
+        };
+
+        console.log("Valores actualizados:", updatedValues);
+
+        const updated = await updateProducto(id, updatedValues);
+
         if (updated) onClose();
       } else {
+        // 🔹 Nuevo producto
         const { id: _, ...cleanValues } = values;
-
         const created = await createProducto({
           ...cleanValues,
-          id_usuario: 1
+          id_usuario: 1,
         });
         if (created) onClose();
       }
     } catch (error) {
-      console.error('Error al registrar:', error);
+      console.error("Error al registrar:", error);
     } finally {
       setIsLoading(false);
     }
   };
+
+
   return (
     <div className={style.Add}>
       <div className={style.Add_Content}>
