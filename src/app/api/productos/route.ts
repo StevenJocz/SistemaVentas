@@ -6,9 +6,9 @@ export async function GET(req: Request) {
   try {
     const productos = await prisma.productos.findMany({
       include: {
-        inventarios: {
+        venta_detalle: {
           orderBy: {
-            createdat: "desc", // traer el inventario más reciente primero
+            id_venta: "desc",
           },
         },
       },
@@ -22,15 +22,13 @@ export async function GET(req: Request) {
     }
 
     const productosConStock = productos.map((p) => {
-      // calcular stock
-      const stockTotal = p.inventarios.reduce((acc, item) => {
-        return item.tipo === "Entrada"
+      const stockTotal = p.venta_detalle.reduce((acc, item) => {
+        return item.id_estado_factura === null
           ? acc + item.cantidad
           : acc - item.cantidad;
       }, 0);
 
-      // tomar el último inventario registrado (si existe)
-      const ultimoInventario = p.inventarios[0];
+      const ultimoInventario = p.venta_detalle[0];
 
       return {
         id: p.id,
@@ -38,13 +36,9 @@ export async function GET(req: Request) {
         color: p.color,
         talla: p.talla,
         tipo: p.tipo,
-        precio_compra: ultimoInventario
-          ? ultimoInventario.precio_compra
-          : 0, // 👈 si no tiene inventario => 0
-        precio_venta: ultimoInventario
-          ? ultimoInventario.precio_venta
-          : 0, // 👈 si no tiene inventario => 0
-        stock: stockTotal, // si no hay inventario, el reduce da 0
+        precio_compra: ultimoInventario ? ultimoInventario.precio_venta : 0,
+        precio_venta: ultimoInventario ? ultimoInventario.precio_venta : 0,
+        stock: stockTotal,
       };
     });
 
@@ -57,7 +51,6 @@ export async function GET(req: Request) {
     );
   }
 }
-
 
 // POST: Crear un nuevo producto + inventario
 export async function POST(req: Request) {
@@ -72,6 +65,7 @@ export async function POST(req: Request) {
       precio_venta,
       stock,
       id_usuario,
+      estado, // Asegúrate de obtener el valor de 'estado' desde la solicitud
     } = body;
 
     if (
@@ -79,7 +73,8 @@ export async function POST(req: Request) {
       !precio_compra ||
       !precio_venta ||
       stock === undefined ||
-      !id_usuario
+      !id_usuario ||
+      estado === undefined // Asegúrate de que 'estado' sea obligatorio
     ) {
       return NextResponse.json(
         { result: false, error: "Datos incompletos" },
@@ -89,25 +84,29 @@ export async function POST(req: Request) {
 
     // ✅ Usamos transacción en callback
     const result = await prisma.$transaction(async (tx) => {
-      // 1. Crear producto
+      // 1. Crear producto con todos los campos necesarios, incluyendo 'estado'
       const nuevoProducto = await tx.productos.create({
         data: {
           nombre,
           color,
           talla,
           tipo,
+          precio_compra,
+          precio_venta,
+          stock,
           id_usuario,
+          estado, // Aquí pasamos el valor de 'estado'
         },
       });
 
-      // 2. Crear inventario asociado
-      const nuevoInventario = await tx.inventario.create({
+      // 2. Crear venta_detalle (lo que asumo es la relación con el inventario)
+      const nuevoInventario = await tx.venta_detalle.create({
         data: {
-          id_producto: nuevoProducto.id, 
+          id_producto: nuevoProducto.id,
           cantidad: stock,
-          precio_compra,
           precio_venta,
-          tipo: "Entrada",
+          precio_compra,
+          id_estado_factura: null, // Suponiendo que es una entrada nueva, sin estado de factura
         },
       });
 
@@ -133,4 +132,3 @@ export async function POST(req: Request) {
     );
   }
 }
-

@@ -10,15 +10,15 @@ datasource db {
 model clientes {
   id            Int             @id @default(autoincrement())
   nombre        String          @db.VarChar(255)
-  tiktok        String          @unique(map: "clientes_cuenta_key") @db.VarChar(255)
+  cuenta        String          @unique @db.VarChar(255)
   telefono      String?         @db.VarChar(255)
   correo        String?         @db.VarChar(255)
-  estado        Int
   instagram     String?         @db.VarChar(255)
   x             String?         @db.VarChar(255)
   youtube       String?         @db.VarChar(255)
   facebook      String?         @db.VarChar(255)
-  id_usuario    Int?
+  estado        Int
+  id_usuario    Int
   pagos         pagos[]
   venta_detalle venta_detalle[]
 }
@@ -68,30 +68,18 @@ model pagos {
 }
 
 model productos {
-  id            Int             @id @default(autoincrement())
-  nombre        String          @db.VarChar(255)
-  color         String?         @db.VarChar(50)
-  talla         String?         @db.VarChar(50)
-  tipo          String?         @db.VarChar(50)
-  id_usuario    Int?
+  id            Int     @id @default(autoincrement())
+  nombre        String  @db.VarChar(255)
+  color         String? @db.VarChar(50)
+  talla         String? @db.VarChar(50)
+  tipo          String? @db.VarChar(50)
+  precio_compra Decimal @db.Money
+  precio_venta  Decimal @db.Money
+  stock         Int
+  id_usuario    Int
+  estado        Int
+
   venta_detalle venta_detalle[]
-  // 👉 relación nueva con inventario
-  inventarios   inventario[]
-}
-
-model inventario {
-  id            Int      @id @default(autoincrement())
-  id_producto   Int
-  cantidad      Int
-  precio_compra Decimal  @db.Money
-  precio_venta  Decimal  @db.Money
-  createdat     DateTime @default(now()) @db.Timestamp(6)
-  updatedat     DateTime @default(now()) @db.Timestamp(6)
-  tipo          String?
-  // 👉 relación inversa hacia productos
-  producto      productos            @relation(fields: [id_producto], references: [id])
-
-  @@index([id_producto])
 }
 
 model roles {
@@ -121,7 +109,7 @@ model venta_detalle {
   id_cliente        Int?
   id_producto       Int?
   cantidad          Int
-  precio            Decimal           @db.Money
+  precio_venta      Decimal           @db.Money
   id_estado_factura Int?
   id_estado_deuda   Int?
   id_estado_envio   Int?
@@ -131,6 +119,7 @@ model venta_detalle {
   estados_envios    estados_envios?   @relation(fields: [id_estado_envio], references: [id], onDelete: NoAction, onUpdate: NoAction)
   estados_facturas  estados_facturas? @relation(fields: [id_estado_factura], references: [id], onDelete: NoAction, onUpdate: NoAction)
   ventas            ventas?           @relation(fields: [id_venta], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  precio_compra     Decimal           @db.Money
 }
 
 model ventas {

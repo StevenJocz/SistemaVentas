@@ -51,7 +51,7 @@ export async function PUT(
 
   const {
     nombre,
-    tiktok,
+    cuenta,
     telefono,
     correo,
     estado,
@@ -67,7 +67,7 @@ export async function PUT(
       where: { id },
       data: {
         nombre,
-        tiktok,
+        cuenta,
         telefono,
         correo,
         estado,

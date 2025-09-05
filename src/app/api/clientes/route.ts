@@ -41,7 +41,7 @@ export async function POST(req: Request) {
 
     const {
       nombre,
-      tiktok,
+      cuenta,
       telefono,
       correo,
       estado,
@@ -52,7 +52,7 @@ export async function POST(req: Request) {
       id_usuario,
     } = body;
 
-    if (!nombre || !tiktok || estado === undefined || !id_usuario) {
+    if (!nombre || !cuenta || estado === undefined || !id_usuario) {
       return NextResponse.json(
         { result: false, error: "Datos incompletos" },
         { status: 400 }
@@ -62,7 +62,7 @@ export async function POST(req: Request) {
     const nuevoCliente = await prisma.clientes.create({
       data: {
         nombre,
-        tiktok,
+        cuenta,
         telefono,
         correo,
         estado,
@@ -89,5 +89,3 @@ export async function POST(req: Request) {
     );
   }
 }
-
-

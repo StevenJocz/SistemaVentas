@@ -32,7 +32,8 @@ export async function POST(req: Request) {
       id_cliente,
       id_producto,
       cantidad,
-      precio,
+      precio_venta,
+      precio_compra,
       id_estado_factura,
       id_estado_deuda,
       id_estado_envio,
@@ -43,7 +44,8 @@ export async function POST(req: Request) {
       !id_cliente ||
       !id_producto ||
       !cantidad ||
-      !precio ||
+      !precio_venta ||
+      !precio_compra ||
       !id_estado_factura ||
       !id_estado_deuda ||
       !id_estado_envio
@@ -60,10 +62,11 @@ export async function POST(req: Request) {
         id_cliente,
         id_producto,
         cantidad,
-        precio,
+        precio_venta,
         id_estado_factura,
         id_estado_deuda,
         id_estado_envio,
+        precio_compra,
       },
     });
 
